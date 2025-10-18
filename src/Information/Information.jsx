@@ -1,14 +1,28 @@
 import { InformationLayout } from "./InformationLayout";
-import PropTypes from 'prop-types';
+import { store } from '../store'
+import { useState, useEffect } from "react";
 
-export function Information({ isDraw, currentPlayer, isGameEnded }) {
+export function Information() {
+	const [localState, setLocalState] = useState(store.getState())
+
+	useEffect(() => {
+		const unsubscribe = store.subscribe(() => {
+			setLocalState(store.getState())
+		})
+
+		return unsubscribe
+	}, [])
+
+	let statusText = ''
+
+	if (localState.isDraw) {
+		statusText = 'Ничья'
+	} else if (localState.isGameEnded) {
+		statusText = `Победа: ${localState.currentPlayer}`
+	} else {
+		statusText = `Ходит: ${localState.currentPlayer}`
+	}
 	return (
-		<InformationLayout isDraw={isDraw} currentPlayer={currentPlayer} isGameEnded={isGameEnded} />
+		<InformationLayout statusText={statusText} />
 	)
-}
-
-Information.propTypes = {
-	isDraw: PropTypes.bool,
-	currentPlayer: PropTypes.string,
-	isGameEnded: PropTypes.bool
 }

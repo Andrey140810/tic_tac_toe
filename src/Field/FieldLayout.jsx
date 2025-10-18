@@ -8,6 +8,6 @@ export function FieldLayout({ field, onClick }) {
 }
 
 FieldLayout.propTypes = {
-	field: PropTypes.array,
-	onClick: PropTypes.func
+	field: PropTypes.array.isRequired,
+	onClick: PropTypes.func.isRequired
 }
