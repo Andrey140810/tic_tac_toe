@@ -1,0 +1,5 @@
+export { RESTART_GAME, restartGame } from './restartGame'
+export { SET_CURRENT_PLAYER, setCarrentPlayer } from './setCarrentPlayer'
+export { SET_DRAW, setDraw } from './setDraw'
+export { SET_FIELD, setField } from './setField'
+export { SET_GAME_ENDED, setGameEnded } from './setGameEnded'

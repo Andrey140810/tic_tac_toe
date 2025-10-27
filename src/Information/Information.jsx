@@ -1,26 +1,19 @@
 import { InformationLayout } from "./InformationLayout";
-import { store } from '../store'
-import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux'
 
 export function Information() {
-	const [localState, setLocalState] = useState(store.getState())
-
-	useEffect(() => {
-		const unsubscribe = store.subscribe(() => {
-			setLocalState(store.getState())
-		})
-
-		return unsubscribe
-	}, [])
+	const isDraw = useSelector(state => state.isDraw)
+	const isGameEnded = useSelector(state => state.isGameEnded)
+	const currentPlayer = useSelector(state => state.currentPlayer)
 
 	let statusText = ''
 
-	if (localState.isDraw) {
+	if (isDraw) {
 		statusText = 'Ничья'
-	} else if (localState.isGameEnded) {
-		statusText = `Победа: ${localState.currentPlayer}`
+	} else if (isGameEnded) {
+		statusText = `Победа: ${currentPlayer}`
 	} else {
-		statusText = `Ходит: ${localState.currentPlayer}`
+		statusText = `Ходит: ${currentPlayer}`
 	}
 	return (
 		<InformationLayout statusText={statusText} />

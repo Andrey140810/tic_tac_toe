@@ -1,45 +1,36 @@
 import { FieldLayout } from "./FieldLayout";
-import { store } from '../store'
-import { useEffect, useState } from "react";
 import { checkWin, checkDraw } from '../utils/gameUtils'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCarrentPlayer, setDraw, setField, setGameEnded } from '../actions'
 
 export function Field() {
-	const [localState, setLocalState] = useState(store.getState())
-
-	useEffect(() => {
-		const unsubscribe = store.subscribe(() => {
-			setLocalState(store.getState())
-		})
-
-		return unsubscribe
-	}, [])
+	const dispatch = useDispatch()
+	const isGameEnded = useSelector(state => state.isGameEnded)
+	const currentPlayer = useSelector(state => state.currentPlayer)
+	const field = useSelector(state => state.field)
 
 	const handleCellClick = (index) => {
-		const currentState = store.getState()
-
-		if(currentState.isGameEnded || currentState.field[index] !== '')
+		if(isGameEnded || field[index] !== '')
 			return
-		const newField = [...currentState.field]
-		newField[index] = currentState.currentPlayer
+		const newField = [...field]
+		newField[index] = currentPlayer
 
-		store.dispatch({ type: 'SET_FIELD', payload: newField })
+		dispatch(setField(newField))
 
-		const stateAfterFieldUpdate = store.getState()
-
-		if (checkWin(stateAfterFieldUpdate.field)) {
-			store.dispatch({ type: 'SET_GAME_ENDED' })
+		if (checkWin(newField)) {
+			dispatch(setGameEnded())
 			return
-		} else if (checkDraw(stateAfterFieldUpdate.field)) {
-			store.dispatch({ type: 'SET_DRAW' })
+		} else if (checkDraw(newField)) {
+			dispatch(setDraw())
 			return
 		} else {
-			const nextPlayer = stateAfterFieldUpdate.currentPlayer === 'X' ? '0' : 'X'
-			store.dispatch({ type: 'SET_CURRENT_PLAYER', payload: nextPlayer })
+			const nextPlayer = currentPlayer === 'X' ? '0' : 'X'
+			dispatch(setCarrentPlayer(nextPlayer))
 		}
 
 	}
 
 	return (
-		<FieldLayout onClick={handleCellClick} field={localState.field} />
+		<FieldLayout onClick={handleCellClick} field={field} />
 	)
 }
