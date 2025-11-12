@@ -1,12 +1,16 @@
-import styles from './Information.module.css'
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export function InformationLayout({ statusText }) {
-
-	return <label className={styles['information-label']}>{statusText}</label>
-
+export class InformationLayout extends Component {
+	render() {
+		return (
+			<label className="text-center text-[30px]">
+				{this.props.statusText}
+			</label>
+		);
+	}
 }
 
 InformationLayout.propTypes = {
-	statusText: PropTypes.string.isRequired
-}
+	statusText: PropTypes.string.isRequired,
+};

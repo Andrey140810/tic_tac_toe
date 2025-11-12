@@ -1,21 +1,26 @@
-import { InformationLayout } from "./InformationLayout";
-import { useSelector } from 'react-redux'
+import { Component } from 'react';
+import { InformationLayout } from './InformationLayout';
+import { connect } from 'react-redux';
 
-export function Information() {
-	const isDraw = useSelector(state => state.isDraw)
-	const isGameEnded = useSelector(state => state.isGameEnded)
-	const currentPlayer = useSelector(state => state.currentPlayer)
+class InformationContainer extends Component {
+	render() {
+		let statusText = '';
 
-	let statusText = ''
-
-	if (isDraw) {
-		statusText = 'Ничья'
-	} else if (isGameEnded) {
-		statusText = `Победа: ${currentPlayer}`
-	} else {
-		statusText = `Ходит: ${currentPlayer}`
+		if (this.props.isDraw) {
+			statusText = 'Ничья';
+		} else if (this.props.isGameEnded) {
+			statusText = `Победа: ${this.props.currentPlayer}`;
+		} else {
+			statusText = `Ходит: ${this.props.currentPlayer}`;
+		}
+		return <InformationLayout statusText={statusText} />;
 	}
-	return (
-		<InformationLayout statusText={statusText} />
-	)
 }
+
+const mapStateToProps = (state) => ({
+	isDraw: state.isDraw,
+	isGameEnded: state.isGameEnded,
+	currentPlayer: state.currentPlayer,
+});
+
+export const Information = connect(mapStateToProps, null)(InformationContainer);
